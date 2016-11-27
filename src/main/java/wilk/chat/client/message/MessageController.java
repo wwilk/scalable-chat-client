@@ -21,13 +21,8 @@ public class MessageController {
         return messageService.findAll();
     }
 
-    @RequestMapping(value = "/{senderId}/{receiverId}/{content}", method = RequestMethod.GET)
-    public Message createIncoming(@PathVariable String senderId, @PathVariable String receiverId,
-                                  @PathVariable String content){
-        Message message = new Message();
-        message.setContent(content);
-        message.setSenderId(senderId);
-        message.setReceiverId(receiverId);
+    @RequestMapping(method = RequestMethod.POST)
+    public Message createIncoming(@RequestBody Message message){
         message.setCreated(new Date());
         return messageService.create(message);
     }

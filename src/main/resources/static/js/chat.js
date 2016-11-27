@@ -1,4 +1,6 @@
 var CHAT = (function(chat){
+    var senderId = "wojtek";
+
     $(function(){
         $.ajaxSetup({contentType: 'application/json'});
         init();
@@ -6,6 +8,7 @@ var CHAT = (function(chat){
 
     function init(){
         displayAllMessages();
+        attachListenerToSendBtn();
     };
 
     function displayAllMessages(){
@@ -16,10 +19,24 @@ var CHAT = (function(chat){
         });
     };
 
+    function attachListenerToSendBtn(){
+        $('#send-btn').click(function(){
+            message = {
+                senderId: $('#sender-id').val(),
+                receiverId: $('#receiver-id').val(),
+                content: $('#content').val()
+            };
+            $.post('message', JSON.stringify(message), function(data){
+                console.log('message successfully sent ' + JSON.stringify(data));
+                appendMessage(data);
+            }, 'json');
+        });
+    };
+
     function appendMessage(message){
-        if(message.receiverId){
+        if(message.receiverId === senderId){
             $('.list-group').append('<li class="list-group-item list-group-item-success">'
-                + '[' + message.receiverId + '] '
+                + '[' + message.senderId + '] '
                 + message.content
                 + '<div style="float:right">' + formatDate(message.created)
                 + '</div></li>');

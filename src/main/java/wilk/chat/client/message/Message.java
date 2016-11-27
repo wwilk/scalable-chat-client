@@ -8,8 +8,6 @@ import java.util.Objects;
  * Created by wilk.wojtek@gmail.com.
  */
 @Entity
-@Inheritance
-@DiscriminatorColumn(name="MESSAGE_TYPE")
 public class Message {
     @Id
     @GeneratedValue
