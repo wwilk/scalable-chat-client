@@ -7,14 +7,23 @@ var CHAT = (function(chat){
     });
 
     function init(){
-        displayAllMessages();
+        displayAvailableContacts();
         attachListenerToSendBtn();
     };
 
-    function displayAllMessages(){
-        $.get('message', function( data ) {
-            for(var i=0;i<data.length;i++){
-                appendMessage(data[i]);
+    function displayAllMessagesOfContact(contact){
+        $.get('message?contact=' + contact, function(messages){
+            $('#messages').empty(); // remove all previous messages
+            for(var i=0;i<messages.length;i++){
+                appendMessage(messages[i]);
+            }
+        });
+    };
+
+    function displayAvailableContacts(){
+        $.get('user', function(contacts){
+            for(var i=0;i<contacts.length;i++){
+                appendContact(contacts[i]);
             }
         });
     };
@@ -33,15 +42,25 @@ var CHAT = (function(chat){
         });
     };
 
+    function appendContact(contact){
+        var contactEntry = $('<li class="list-group-item list-group-item-warning">'
+                      + contact
+                      + '</li>');
+        $('#contacts').append(contactEntry);
+        contactEntry.click(function(){
+            displayAllMessagesOfContact(contact);
+        });
+    };
+
     function appendMessage(message){
         if(message.receiverId === senderId){
-            $('.list-group').append('<li class="list-group-item list-group-item-success">'
+            $('#messages').append('<li class="list-group-item list-group-item-success">'
                 + '[' + message.senderId + '] '
                 + message.content
                 + '<div style="float:right">' + formatDate(message.created)
                 + '</div></li>');
         } else{
-            $('.list-group').append('<li class="list-group-item list-group-item-info">'
+            $('#messages').append('<li class="list-group-item list-group-item-info">'
                 + '[' + message.senderId + '] '
                 + message.content
                 + '<div style="float:right">' + formatDate(message.created)

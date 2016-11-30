@@ -17,8 +17,8 @@ public class MessageController {
     MessageService messageService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Message> getAllMessages(){
-        return messageService.findAll();
+    public List<Message> getAllMessages(@RequestParam String contact){
+        return messageService.findAllForContact(contact);
     }
 
     @RequestMapping(method = RequestMethod.POST)

@@ -52,17 +52,19 @@ public class MessageServiceTest {
         Message in = new Message();
         in.setContent("content");
         in.setCreated(new Date());
-        in.setSenderId("senderId");
+        in.setSenderId("flip");
+        in.setReceiverId("flap");
 
         Message out = new Message();
         out.setContent("content");
         out.setCreated(new Date());
-        out.setReceiverId("receiverId");
+        out.setReceiverId("flip");
+        out.setSenderId("flap");
 
         entityManager.persist(in);
         entityManager.persist(out);
 
-        List<Message> all = messageService.findAll();
+        List<Message> all = messageService.findAllForContact("flip");
 
         assertThat(all).contains(in, out);
     }

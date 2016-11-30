@@ -26,8 +26,7 @@ public class MessageService {
         return message;
     }
 
-    public List<Message> findAll(){
-        return messageRepository.findAll();
+    public List<Message> findAllForContact(String contact) {
+        return messageRepository.findAllForContact(contact);
     }
-
 }
