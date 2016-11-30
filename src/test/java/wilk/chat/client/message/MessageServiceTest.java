@@ -1,4 +1,4 @@
-package wilk.chat;
+package wilk.chat.client.message;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

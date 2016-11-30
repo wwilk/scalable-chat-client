@@ -25,9 +25,7 @@ public class UserRepository {
     public void createUserIfNotExists(String username) {
         User user = entityManager.find(User.class, username);
         if(user == null) {
-            user = new User();
-            user.setUsername(username);
-            entityManager.persist(user);
+            entityManager.persist(new User(username));
         }
     }
 }
