@@ -14,9 +14,9 @@ public class UserService {
     @Autowired
     UserRepository userRepository;
 
-    public List<String> getAllRecipientsIds(){
+    public List<String> getAllRecipientsIds(String excludedUsername){
         return userRepository
-                .getAllUsers()
+                .getAllUsers(excludedUsername)
                 .stream()
                 .map(user -> user.getUsername())
                 .collect(Collectors.toList());

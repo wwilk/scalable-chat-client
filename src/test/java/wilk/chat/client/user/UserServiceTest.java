@@ -30,12 +30,13 @@ public class UserServiceTest {
     EntityManager entityManager;
 
     @Test
-    public void should_find_all_users(){
-        entityManager.persist(new User("testUser"));
-        entityManager.persist(new User("testUser2"));
+    public void should_find_all_users_except_for_excluded_one(){
+        userService.createUserIfNotExists("testUser");
+        userService.createUserIfNotExists("testUser2");
+        userService.createUserIfNotExists("testUser3");
 
-        List<String> allUsers = userService.getAllRecipientsIds();
+        List<String> allUsers = userService.getAllRecipientsIds("testUser2");
 
-        assertThat(allUsers).containsOnly("testUser", "testUser2");
+        assertThat(allUsers).containsOnly("testUser", "testUser3");
     }
 }

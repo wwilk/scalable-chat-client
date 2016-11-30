@@ -15,11 +15,14 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
+    @Value("${auth.username}")
+    String username;
+
     @Autowired
     UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<String> getAllAvailableRecipients(){
-        return userService.getAllRecipientsIds();
+        return userService.getAllRecipientsIds(username);
     }
 }
