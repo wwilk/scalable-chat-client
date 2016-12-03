@@ -15,14 +15,16 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    @Value("${auth.username}")
-    String username;
-
     @Autowired
     UserService userService;
 
     @RequestMapping(method = RequestMethod.GET)
     public List<String> getAllAvailableRecipients(){
-        return userService.getAllRecipientsIds(username);
+        return userService.getAllAvailableContactsExceptForAuthenticatedUser();
+    }
+
+    @RequestMapping(value = "/authenticated", method = RequestMethod.GET)
+    public String getAuthenticatedUsername(){
+        return userService.getAuthenticatedUsername();
     }
 }

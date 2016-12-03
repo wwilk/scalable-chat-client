@@ -1,6 +1,7 @@
 package wilk.chat.client.user;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,16 +14,23 @@ import java.util.stream.Collectors;
 public class UserService {
     @Autowired
     UserRepository userRepository;
+    @Autowired
+    UserRemoteService userRemoteService;
+    @Value("${auth.username}")
+    String authenticatedUsername;
 
-    public List<String> getAllRecipientsIds(String excludedUsername){
-        return userRepository
-                .getAllUsers(excludedUsername)
+    public List<String> getAllAvailableContactsExceptForAuthenticatedUser(){
+        return userRemoteService.getAvailableContacts()
                 .stream()
-                .map(user -> user.getUsername())
+                .filter(username -> !username.equals(authenticatedUsername))
                 .collect(Collectors.toList());
     }
 
     public void createUserIfNotExists(String username){
         userRepository.createUserIfNotExists(username);
+    }
+
+    public String getAuthenticatedUsername() {
+        return authenticatedUsername;
     }
 }

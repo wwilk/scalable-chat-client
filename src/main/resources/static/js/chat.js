@@ -7,6 +7,7 @@ var CHAT = (function(chat){
     });
 
     function init(){
+        displayHeader();
         displayAvailableContacts();
         attachListenerToSendBtn();
     };
@@ -17,6 +18,12 @@ var CHAT = (function(chat){
             for(var i=0;i<messages.length;i++){
                 appendMessage(messages[i]);
             }
+        });
+    };
+
+    function displayHeader(){
+        $.get('user/authenticated', function(authenticatedUsername){
+            $('#header').text('You are logged in as ' + authenticatedUsername);
         });
     };
 
