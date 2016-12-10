@@ -5,7 +5,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import wilk.chat.client.user.UserService;
 
+import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by wilk.wojtek@gmail.com.
@@ -17,13 +19,18 @@ public class MessageService {
     @Autowired
     MessageRepository messageRepository;
     @Autowired
-    UserService userService;
+    MessageRemoteService messageRemoteService;
+
 
     public Message create(Message message){
-        userService.createUserIfNotExists(message.getReceiverId());
-        userService.createUserIfNotExists(message.getSenderId());
-        messageRepository.create(message);
-        return message;
+        Message remoteMessage = messageRemoteService.createMessage(message);
+        messageRepository.create(remoteMessage);
+        return remoteMessage;
+    }
+
+    public void pollForMessages(){
+        messageRemoteService.getMessages()
+                .forEach(messageRepository::create);
     }
 
     public List<Message> findAllForContact(String contact) {

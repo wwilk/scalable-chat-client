@@ -13,7 +13,7 @@ var CHAT = (function(chat){
     };
 
     function displayAllMessagesOfContact(contact){
-        $.get('message?contact=' + contact, function(messages){
+        $.get('message?withPolling=true&contact=' + contact, function(messages){
             $('#messages').empty(); // remove all previous messages
             for(var i=0;i<messages.length;i++){
                 appendMessage(messages[i]);

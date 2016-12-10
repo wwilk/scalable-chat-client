@@ -17,13 +17,16 @@ public class MessageController {
     MessageService messageService;
 
     @RequestMapping(method = RequestMethod.GET)
-    public List<Message> getAllMessages(@RequestParam String contact){
+    public List<Message> getAllMessages(@RequestParam String contact,
+                                        @RequestParam boolean withPolling){
+        if(withPolling) {
+            messageService.pollForMessages();
+        }
         return messageService.findAllForContact(contact);
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Message createIncoming(@RequestBody Message message){
-        message.setCreated(new Date());
         return messageService.create(message);
     }
 }

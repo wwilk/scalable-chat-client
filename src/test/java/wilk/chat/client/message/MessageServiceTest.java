@@ -1,11 +1,16 @@
 package wilk.chat.client.message;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.TestAnnotationUtils;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.transaction.annotation.Transactional;
 import wilk.chat.client.message.Message;
 import wilk.chat.client.message.MessageService;
@@ -15,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 /**
  * Created by wilk.wojtek@gmail.com.
@@ -30,6 +36,15 @@ public class MessageServiceTest {
     @Autowired
     EntityManager entityManager;
 
+    @Mock
+    MessageRemoteService messageRemoteService;
+
+    @Before
+    public void setUp(){
+        MockitoAnnotations.initMocks(this);
+        ReflectionTestUtils.setField(messageService, "messageRemoteService", messageRemoteService);
+    }
+
     @Test
     public void should_create_messages(){
         Message message = new Message();
@@ -38,9 +53,11 @@ public class MessageServiceTest {
         message.setSenderId("senderId");
         message.setReceiverId("receiverId");
 
-        messageService.create(message);
+        when(messageRemoteService.createMessage(message)).thenReturn(message);
 
-        Message persisted = entityManager.find(Message.class, message.getId());
+        Message result = messageService.create(message);
+
+        Message persisted = entityManager.find(Message.class, result.getId());
         assertThat(persisted.getCreated()).isEqualTo(message.getCreated());
         assertThat(persisted.getContent()).isEqualTo(message.getContent());
         assertThat(persisted.getSenderId()).isEqualToIgnoringCase(message.getSenderId());

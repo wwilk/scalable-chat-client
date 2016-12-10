@@ -12,6 +12,7 @@ public class Message {
     @Id
     @GeneratedValue
     private Integer id;
+    private String remoteId;
     private String content;
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
@@ -56,6 +57,14 @@ public class Message {
 
     public void setReceiverId(String receiverId) {
         this.receiverId = receiverId;
+    }
+
+    public String getRemoteId() {
+        return remoteId;
+    }
+
+    public void setRemoteId(String remoteId) {
+        this.remoteId = remoteId;
     }
 
     @Override
