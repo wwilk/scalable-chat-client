@@ -17,7 +17,7 @@ public class UserRepository {
 
     public List<User> getAllUsers(){
         return entityManager
-                .createNativeQuery("SELECT * FROM USER", User.class)
+                .createNativeQuery("SELECT * FROM USERS", User.class)
                 .getResultList();
     }
 

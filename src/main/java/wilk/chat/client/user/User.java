@@ -2,12 +2,15 @@ package wilk.chat.client.user;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.Table;
+
 import java.util.Objects;
 
 /**
  * Created by wilk.wojtek@gmail.com.
  */
 @Entity
+@Table(name = "users")
 public class User {
 
     @Id
