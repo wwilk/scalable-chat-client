@@ -1,5 +1,6 @@
 var CHAT = (function(chat){
-    var senderId = "wojtek";
+	var authenticatedUser = 'wojtek';
+    var currentlySelectedSender;
 
     $(function(){
         $.ajaxSetup({contentType: 'application/json'});
@@ -37,7 +38,9 @@ var CHAT = (function(chat){
             };
             $.post('message', JSON.stringify(message), function(data){
                 console.log('message successfully sent ' + JSON.stringify(data));
-                appendMessage(data);
+                if(data.senderId === currentlySelectedSender || data.senderId === authenticatedUser){
+                	appendMessage(data);
+                }
             }, 'json');
         });
     };
@@ -48,12 +51,13 @@ var CHAT = (function(chat){
                       + '</li>');
         $('#contacts').append(contactEntry);
         contactEntry.click(function(){
+        	currentlySelectedSender = contact;
             displayAllMessagesOfContact(contact);
         });
     };
 
     function appendMessage(message){
-        if(message.receiverId === senderId){
+        if(message.receiverId === authenticatedUser){
             $('#messages').append('<li class="list-group-item list-group-item-success">'
                 + '[' + message.senderId + '] '
                 + message.content
