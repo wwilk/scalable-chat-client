@@ -17,7 +17,7 @@ public class UserRepository {
 
     public List<User> getAllUsers(String excludedUsername){
         return entityManager
-                .createNativeQuery("SELECT * FROM USER WHERE USERNAME != ?1", User.class)
+                .createNativeQuery("SELECT * FROM USERS WHERE USERNAME != ?1", User.class)
                 .setParameter(1, excludedUsername)
                 .getResultList();
     }
